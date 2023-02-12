@@ -1,0 +1,23 @@
+version: "1"
+
+services:
+  db:
+    image: postgres
+    volumes:
+      - ./sql/db.sql:/docker-entrypoint-initdb.d/create_tables.sql
+    env_file: ./.env
+    environment:
+      - POSTGRES_DB=${P_DB}
+      - POSTGRES_USER=${P_USER}
+      - POSTGRES_PASSWORD=${P_PASSWORD}
+      - POSTGRES_HOST=${P_HOST}
+  bot:
+    build: .
+    env_file: ./.env
+    environment:
+      - POSTGRES_DB=${P_DB}
+      - POSTGRES_USER=${P_USER}
+      - POSTGRES_PASSWORD=${P_PASSWORD}
+      - POSTGRES_HOST=${P_HOST}
+    depends_on:
+      - db
